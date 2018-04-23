@@ -1,0 +1,22 @@
+{% extends "learnlogs/base.html" %}
+{% load bootstrap3 %}
+{% load mytags %}
+{% block header %}
+    <h2>{% trans "Log in to your account" request.session %}.</h2>
+{% endblock header %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <script type="text/javascript">
+            $(location).prop('href', "{% url 'learnlogs:index' %}")
+        </script>
+    {% endif %}
+    <form method="post" action="{% url 'users:login' %}" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button name="submit" class="btn btn-primary">{% trans "Login" request.session %}</button>
+        {% endbuttons %}
+        <input type="hidden" name="next" value="{% url 'learnlogs:index' %}">
+    </form>
+{% endblock content %}

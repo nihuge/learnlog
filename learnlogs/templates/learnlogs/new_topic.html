@@ -1,0 +1,18 @@
+{% extends 'learnlogs/base.html' %}
+{% load bootstrap3 %}
+{% load mytags %}
+{% block header %}
+    <h2>{% trans 'Add a new topic' request.session %}:</h2>
+{% endblock header %}
+
+{% block content %}
+    <form action="{% url 'learnlogs:new_topic' %}"
+          method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button name="submit"
+                    class="btn btn-primary">{% trans 'add topic' request.session %}</button>
+        {% endbuttons %}
+    </form>
+{% endblock content %}

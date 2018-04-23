@@ -1,0 +1,20 @@
+{% extends "learnlogs/base.html" %}
+{% load mytags %}
+{% block header %}
+    <div class="jumbotron">
+        <h1>{% trans 'Track your learning' request.session %}.</h1>
+    </div>
+{% endblock header %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <h2>
+            <a href="{% url 'users:register' %}">
+                {% trans 'Register an account' request.session %}</a>
+            {% trans 'to make your own Learning Log' request.session %}
+        </h2>
+    {% endif %}
+    <h2>
+        {% trans "Whenever you learn something new about a topic ,make an entry summarizing what you've learned" request.session %}
+    </h2>
+{% endblock content %}

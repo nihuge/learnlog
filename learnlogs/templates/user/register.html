@@ -1,0 +1,18 @@
+{% extends "learnlogs/base.html" %}
+{% load bootstrap3 %}
+{% load mytags %}
+{% block header %}
+    <h2 >{% trans 'Register an account' request.session %}</h2>
+{% endblock header %}
+{% block content %}
+    <form method="post" action="{% url 'users:register' %}" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button name="submit" class="btn btn-primary">
+                {% trans "register" request.session %}</button>
+        {% endbuttons %}
+        <input type="hidden" name="next"
+               value="{% url 'learnlogs:index' %}">
+    </form>
+{% endblock content %}

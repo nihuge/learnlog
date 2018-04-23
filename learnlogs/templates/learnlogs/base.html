@@ -1,0 +1,127 @@
+{% load bootstrap3 %}
+{% load mytags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% trans 'Learning Log' request.session %}</title>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link href="{% static 'css/navoff.css' %}" rel="stylesheet">
+    <script src="{% static 'js/navoff.js' %}"></script>
+    <style>
+        .navbar {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Static navbar -->
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+            </button>
+            <a class="navbar-brand"
+               href="{% url 'learnlogs:index' %}">{% trans 'Learn Logs' request.session %}</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse" aria-expanded="false"
+             style="height: 1px;">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="{% url 'learnlogs:topics' %}">{% trans 'Topics' request.session %}</a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li>
+                        <a>{% trans 'Hello' request.session %},{{ user.username }}.</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'users:logout' %}">{% trans 'logout' request.session %}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{% url 'users:register' %}">{% trans 'register' request.session %}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'users:login' %}">{% trans 'login' request.session %}</a>
+                    </li>
+                {% endif %}
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       role="button" aria-haspopup="true"
+                       aria-expanded="false">{% trans 'choise language' request.session %}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">{% trans 'language' request.session %}</li>
+                        {% get_language_list as languages%}
+                        {% for language_simple,language_text in languages.items %}
+                            <li>
+                                <a href="{% url 'learnlogs:change_language' language_simple %}">{{ language_text }}</a>
+                            </li>
+                        {% endfor %}
+                        {#                        <li><a href="{% url 'learnlogs:change_language' 'en-US' %}">english</a>#}
+                        {#                        </li>#}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.nav-collapse -->
+</nav>
+
+
+<div class="container">
+    <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
+            {% if user.is_authenticated %}
+                <p class="pull-right visible-xs">
+                    <button type="button" class="btn btn-primary btn-xs"
+                            data-toggle="offcanvas">{% trans 'Toggle the right nav' request.session %}
+                    </button>
+                </p>
+            {% endif %}
+
+            <div class="page-header">
+                {% block header %}{% endblock header %}
+            </div>
+            <div>
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+            {% if user.is_authenticated %}
+                <div class="list-group">
+                    {#            <a href="#" class="list-group-item active">Link</a>#}
+
+                    {% get_right_nav request.user as navs %}
+                    {% for nav in navs %}
+                        <a href="{% url 'learnlogs:topic' nav.id %}"
+                           class="list-group-item">{{ nav }}</a>
+                    {% empty %}
+                        <a href="{% url "learnlogs:new_topic" %}"
+                           class="list-group-item"><span
+                                class="glyphicon glyphicon-plus"
+                                aria-hidden="true"></span> {% trans 'add some topic' request.session %}?</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div><!-- /container -->
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "learnlogs/base.html" %}
+{% load bootstrap3 %}
+{% load mytags %}
+{% block header %}
+    <h1>{% trans 'Topics' request.session %}</h1>
+{% endblock header %}
+{% block content %}
+    <div>
+        {% for topic in topics %}
+            <div class="jumbotron">
+                <h2><font style="vertical-align: inherit;"><font
+                        style="vertical-align: inherit;">{{ topic }}</font></font>
+                </h2>
+                <p>
+                    <a class="btn btn-lg btn-primary"
+                       href="{% url 'learnlogs:topic' topic.id %}"
+                       role="button"><font style="vertical-align: inherit;"><font
+                            style="vertical-align: inherit;">{% trans 'Watch' request.session %} »</font></font></a>
+                </p>
+            </div>
+        {% empty %}
+            <h1>{% trans 'No topics have been added yet' request.session %}.</h1>
+        {% endfor %}
+        <h3><a href="{% url 'learnlogs:new_topic' %}">{% trans 'Add a new topic' request.session %}</a></h3>
+    </div>
+{% endblock content %}

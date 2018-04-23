@@ -1,0 +1,28 @@
+{% extends 'learnlogs/base.html' %}
+{% load mytags %}
+{% block header %}
+    <h2>{% trans 'Topic' request.session %}:{{ topic }}</h2>
+{% endblock header %}
+{% block content %}
+    <p>
+        <a href="{% url 'learnlogs:new_entry' topic.id %}">
+            {% trans 'Add new entry' request.session %}</a>
+    </p>
+    {% for entry in entries %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>{{ entry.date_added|date:'Y-m-d H:i:s' }}
+                    <small>
+                        <a href="{% url 'learnlogs:edit_entry' entry.id %}">
+                            {% trans 'edit entry' request.session %}</a>
+                    </small>
+                </h3>
+            </div>
+            <div class="panel-body"> {{ entry.text|linebreaks }}</div>
+        </div>
+    {% empty %}
+        <li>
+            {% trans 'There are no entries for this topic yet' request.session %}.
+        </li>
+    {% endfor %}
+{% endblock content %}
